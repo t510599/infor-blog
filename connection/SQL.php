@@ -35,7 +35,7 @@ if(!@$includepath){
     set_include_path('include/');
 }
 error_reporting(E_ALL);
-require_once('database.php');
+require_once('db.php');
 
 $database_SQL = "blog";//資料庫名稱
 $username_SQL = "blog";//連線帳號

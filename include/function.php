@@ -3,7 +3,7 @@ function login($_username,$_password){ // modified from secret blog function.php
 	global $SQL;
 	if (isset($_username)&&isset($_password)) {
 		$_username=strtolower($_username);
-        $login = $SQL->query("SELECT `username`, `password` FROM `user` WHERE `username` = '%s' AND `password` = '%s'",array($_username,pwd($_password,$_username)));
+        $login = $SQL->query("SELECT `username`, `pwd` FROM `user` WHERE `username` = '%s' AND `pwd` = '%s'",array($_username,pwd($_password,$_username)));
 		if ($login->num_rows > 0) {
 			$info = $login->fetch_assoc();
 			$_SESSION['username'] = $_username;      

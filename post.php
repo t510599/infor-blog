@@ -16,8 +16,8 @@ if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']
             header('Location: post.php?err=edit');
             exit;
         }
-        $SQL->query("UPDATE `post` SET `title`='%s', `content`='%s' WHERE `pid`='%d' AND `user`='%s'",array(htmlspecialchars($_POST['title']),$_POST['content'],abs($_GET['id']),$_SESSION['username']));
-        header('Location: post.php?ok=edit');
+        $SQL->query("UPDATE `post` SET `title`='%s', `content`='%s' WHERE `pid`='%d' AND `user`='%s'",array(htmlspecialchars($_POST['title']),$_POST['content'],abs($_POST['id']),$_SESSION['username']));
+        header('Location: post.php?pid='.$_POST['pid']);
         exit;
     }
 }
@@ -51,7 +51,7 @@ if(isset($_GET['pid'])){
         exit;
     }
     // get post data
-    $name = getResult("SELECT `name` FROM `member` WHERE `username`='%s'",array($post['row']['username']))['row']['name'];
+    $name = getResult("SELECT `name` FROM `user` WHERE `username`='%s'",array($post['row']['username']))['row']['name'];
     $title = $post['row']['title'];
     $content = $post['row']['content'];
     $time = $post['row']['time'];
@@ -67,7 +67,7 @@ if(isset($_GET['pid'])){
         $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],$title);
         $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();</script>");
     } else {
-        $view = new View('theme/default.html','theme/default.html','theme/sidebar.php',$blog['site_name'],$title);
+        $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['site_name'],$title);
     }
     ?>
     <h1 style="margin-left:5px;"><?php echo $title;?></h1>
@@ -198,7 +198,7 @@ if(isset($_GET['pid'])){
     <?php
     if($post_list['num_rows']>0){
         do {
-            $author = getResult("SELECT `name` FROM `member` WHERE `username`=%s",array($post_list['row']['username']));
+            $author = getResult("SELECT `name` FROM `user` WHERE `username`=%s",array($post_list['row']['username']));
             $pid = $post_list['row']['pid'];
             $title = $post_list['row']['title'];
             $time = $post_list['row']['time']

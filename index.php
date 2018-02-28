@@ -17,7 +17,7 @@ if(isset($_SESSION['username'])){
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],"首頁");
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();</script>");
 } else {
-    $view = new View('theme/default.html','theme/default.html','theme/sidebar.php',$blog['site_name'],"首頁");
+    $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['site_name'],"首頁");
 }
 
 if (isset($_GET['ok'])){
@@ -28,6 +28,10 @@ if (isset($_GET['ok'])){
 <?php } else if ($_GET['ok'] == "reg") {?>
 <div class="ts inverted primary message">
     <p>註冊成功</p>
+</div>
+<?php } else if ($_GET['ok'] == "reg") {?>
+<div class="ts inverted info message">
+    <p>已登出</p>
 </div>
 <?php }
 }
@@ -49,7 +53,7 @@ if (isset($_GET['err'])) {
 
 if ($post_list['num_rows']>0){
     do {
-        $name = getResult("SELECT `name` FROM `member` WHERE `username`='%s'",array($post_list['row']['username']))['row']['name'];
+        $name = getResult("SELECT `name` FROM `user` WHERE `username`='%s'",array($post_list['row']['username']))['row']['name'];
         $title = $post_list['row']['title'];
         $content = $post_list['row']['content'];
         $time = $post_list['row']['time'];

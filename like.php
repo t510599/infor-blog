@@ -24,12 +24,12 @@ if(!isset($_GET['pid'])) {
         if($userliked){
             // unlike
             $SQL->query("DELETE FROM `like` WHERE `pid`='%d' AND `username`='%s'",array($pid,$_SESSION['username']));
-            $likes = getResult("SELECT COUNT(*) FROM `like` WHERE `pid`='%d'",array($pid))['row'];
+            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid))['num_rows'];
             $data = array('status' => false,'id' => $pid,'likes' => $likes);
         } else {
             // like
             $SQL->query("INSERT INTO `like` (`pid`, `username`) VALUES ('%d', '%s')",array($pid,$_SESSION['username']));
-            $likes = getResult("SELECT COUNT(*) FROM `like` WHERE `pid`='%d'",array($pid))['row'];
+            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid))['num_rows'];
             $data = array('status' => true,'id' => $pid,'likes' => $likes);
         }
     }
