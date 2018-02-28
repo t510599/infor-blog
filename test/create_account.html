@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帳號 | 石頭洞</title>
+    <!-- Tocas UI：CSS 與元件 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
+    <!-- Tocas JS：模塊與 JavaScript 函式 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- simple markdown editor -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <!-- showdown.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+</head>
+<body>
+    <div class="ts top attached pointing secondary large menu">
+        <div class="ts narrow container">
+            <a href="" class="active item">首頁</a>
+            <form class="right fitted item" action="index.php" method="POST" name="login">
+                <div class="ts small underlined input">
+                    <input placeholder="Username" type="text">
+                    <input placeholder="Password" type="password">
+                </div>
+                <a class="ts small icon button" style="margin:5px 5px;" href="javascript:submitform()">
+                    <i class="sign in icon"></i>
+                </a>
+                <script>function submitform() {document.login.submit();}</script>
+            </form>
+        </div>
+    </div>
+    <div class="ts large vartically padded heading slate">
+        <div class="ts narrow container">
+            <div class="header">石頭洞</div>
+            <div class="description">Welcome to 石頭洞</div>
+        </div>
+    </div>
+    <div class="ts narrow container" style="padding:10px;">
+        <div class="ts grid">
+            <div class="twelve wide column" id="content">
+                <form action="account.php" method="POST" name="newacc">
+                    <div class="ts form">
+                        <div class="ts big dividing header">註冊</div>
+                        <div class="required field">
+                            <label>帳號</label>
+                            <input type="text" required="required" name="username">
+                            <small>你未來將無法更改這項設定。</small>
+                        </div>
+                        <div class="required field">
+                            <label>暱稱</label>
+                            <input type="text" required="required" name="name" maxlength="40">
+                        </div>
+                        <div class="required field">
+                            <label>密碼</label>
+                            <input type="password" required="required" name="password">
+                        </div>
+                        <a class="ts primary button" style="margin:5px 5px; float:right;" href="javascript:createAccount()">
+                            送出
+                        </a>
+                        <script>function createAccount() {document.newacc.submit();}</script>
+                    </div>
+                </form>
+            </div>
+            <div class="four wide column" id="sidebar">
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="ts divider" style="width:80%; margin:auto;"></div>
+        <div class="ts center aligned basic segment">   
+            Work by <a href="https://github.com/t510599">t510599</a>
+        </div>
+    </footer>
+    <script src="../include/js/markdown.js"></script>
+    <script src="../include/js/like.js"></script>
+</body>
+</html>

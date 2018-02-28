@@ -1,0 +1,15 @@
+<div class="ts top attached pointing secondary large menu">
+    <div class="ts narrow container">
+        <a href="index.php" class="active item">首頁</a>
+        <form class="right fitted item" action="login.php" method="POST" name="login">
+            <div class="ts small underlined input">
+                <input placeholder="Username" type="text" name="username">
+                <input placeholder="Password" type="password" name="password">
+            </div>
+            <a class="ts small icon button" style="margin:5px 5px;" href="javascript:submitform()">
+                <i class="sign in icon"></i>
+            </a>
+            <script>function submitform() {document.login.submit();}</script>
+        </form>
+    </div>
+</div>

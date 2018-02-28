@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章 | 石頭洞</title>
+    <!-- Tocas UI：CSS 與元件 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
+    <!-- Tocas JS：模塊與 JavaScript 函式 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- simple markdown editor -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <!-- showdown.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.8.6/showdown.min.js"></script>
+</head>
+<body>
+    <div class="ts top attached pointing secondary large menu">
+        <div class="ts narrow container">
+            <a href="" class="item">首頁</a>
+            <div class="ts dropdown active item">
+                <div class="text">文章</div>
+                <div class="menu">
+                    <a href="post.php?new" class="item">新增</a>
+                    <a href="post.php" class="item">列表</a>
+                </div>
+            </div>
+            <a href="" class="item">帳號</a>
+            <a href="" class="right item">登出</a>
+        </div>
+    </div>
+    <div class="ts large vartically padded heading slate">
+        <div class="ts narrow container">
+            <div class="header">石頭洞</div>
+            <div class="description">Welcome to 石頭洞</div>
+        </div>
+    </div>
+    <div class="ts narrow container" style="padding:10px;">
+        <div class="ts grid">
+            <div class="twelve wide column" id="content">
+                <div class="ts big dividing header">文章</div>
+                <table class="ts celled striped table">
+                    <thead>
+                        <tr>
+                            <th>標題</th>
+                            <th>讚</th>
+                            <th>日期</th>
+                            <th>管理</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="post.php?pid=1">Python Card</a></td>
+                            <td class="collapsing">25</td>
+                            <td class="collapsing">2018-12-02</td>
+                            <td class="right aligned collapsing">
+                                <a class="ts primary button" href="post.php?edit=1">編輯</a>
+                                <a class="ts negative button" href="post.php?del=1">刪除</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="post.php?pid=2">Python Card</a></td>
+                            <td class="collapsing">0</td>
+                            <td class="collapsing">2018-12-02</td>
+                            <td class="right aligned collapsing">
+                                <a class="ts primary button" href="post.php?edit=2">編輯</a>
+                                <a class="ts negative button" href="post.php?del=2">刪除</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="post.php?pid=3">Python Card</a></td>
+                            <td class="collapsing">0</td>
+                            <td class="collapsing">2018-12-02</td>
+                            <td class="right aligned collapsing">
+                                <a class="ts primary button" href="post.php?edit=3">編輯</a>
+                                <a class="ts negative button" href="post.php?del=3">刪除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="four wide column" id="sidebar">
+                <h3 class="ts header">
+                    <img class="ts circular image" src="https://tocas-ui.com/assets/img/5e5e3a6.png" style="margin-right:5px;">Tony
+                </h3>
+                <div class="ts fluid action input" style="margin-bottom:10px;">
+                    <input type="text" placeholder="在這搜尋人、事、物">
+                    <button class="ts button">搜尋</button>
+                </div>
+                <div class="ts segments" style="margin-bottom:10px;">
+                    <div class="ts tertiary center aligned segment">名稱</div>
+                    <div class="ts segment">
+                        <p>項目</p>
+                        <p>項目</p>
+                        <p>項目</p>
+                    </div>
+                </div>
+                <div class="ts segments" style="margin-bottom:10px;">
+                    <div class="ts tertiary center aligned segment">名稱</div>
+                    <div class="ts segment">
+                        <p>項目</p>
+                        <p>項目</p>
+                        <p>項目</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="ts divider" style="width:80%; margin:auto;"></div>
+        <div class="ts center aligned basic segment">   
+            Work by <a href="https://github.com/t510599">t510599</a>
+        </div>
+    </footer>
+    <script src="../include/js/markdown.js"></script>
+    <script src="../include/js/like.js"></script>
+</body>
+</html>
