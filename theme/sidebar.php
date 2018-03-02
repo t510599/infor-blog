@@ -4,14 +4,14 @@ require_once('config.php');
 
 if(!isset($_SESSION['username'])){ ?>
     <div class="ts basic center aligned segment">登入或是<a href="account.php?new">註冊</a></div>
-<?php} else {
+<?php } else {
     $name = getResult("SELECT `name` FROM `user` WHERE `username`=`%s`",array($_SESSION['username']));
     $name = $name['row']['name'];
     ?>
     <h3 class="ts header">
-        <img class="ts circular image" src="https://tocas-ui.com/assets/img/5e5e3a6.png" style="margin-right:5px;"> <?php echo $name;?>
+        <img class="ts circular image" src="https://tocas-ui.com/assets/img/5e5e3a6.png" style="margin-right:5px;"> <?php echo $name; ?>
     </h3>
-<?php}?>
+<?php } ?>
 
 <div class="ts fluid action input" style="margin-bottom:10px;">
     <input type="text" placeholder="在這搜尋人、事、物">

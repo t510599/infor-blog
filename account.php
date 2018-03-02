@@ -7,7 +7,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['name'
 	$_POST['username']=strtolower($_POST['username']);
 	$exist = getResult("SELECT * FROM `user` WHERE `username`='%s'",array($_POST['username']))['num_rows'];
 	if($exist==0){
-		$SQL->query("INSERT INTO `user` (`username`, `pwd`, `name`) VALUES ('%s', '%s', '%s')",array($_POST['username'],pwd($_POST['password'],$_POST['username']),$_POST['name']);
+		$SQL->query("INSERT INTO `user` (`username`, `pwd`, `name`) VALUES ('%s', '%s', '%s')",array($_POST['username'],pwd($_POST['password'],$_POST['username']),$_POST['name']));
         header('Location: index.php?ok=reg');
         exit;
 	} else {
@@ -46,7 +46,7 @@ if (!isset($_SESSION['username']) && !isset($_GET['new'])) {
 
 if (isset($_GET['new'])){
 // create 
-    $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['site_name'],"註冊");
+    $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['name'],"註冊");
     if ($_GET['err'] == "miss"){ ?>
 <div class="ts inverted negative message">
     <p>請填寫所有欄位</p>
@@ -82,7 +82,7 @@ if (isset($_GET['new'])){
     $username = $_SESSION['username'];
     $name = getResult("SELECT `name` FROM `user` WHERE `username`=`%s`",array($username));
     $name = $name['row']['name'];;
-    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],"帳號");
+    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"帳號");
     if (isset($_GET['err'])){
         if ($_GET['err'] == "edit"){?>
 <div class="ts inverted negative message">
@@ -132,6 +132,6 @@ if (isset($_GET['new'])){
         <script>function editAccount() {document.editacc.submit();}</script>
     </div>
 </form>
-<? $view->render();
+<?php $view->render();
 }
 ?>

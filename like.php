@@ -11,7 +11,11 @@ if(!isset($_GET['pid'])) {
 } else {
     $pid = abs($_GET['pid']);
     $result = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid));
-    $likes = $result['num_rows'];
+    if ($result['num_rows']<0){
+        $likes = 0;
+    } else {
+        $likes = $result['num_rows'];
+    }
     if(!isset($_SESSION['username'])) { // only get likes
         $data = array('status' => false,'id' => $pid,'likes' => $likes);
     } else { // authorized user like actions

@@ -22,13 +22,15 @@ if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']
     }
 }
 
-if(!isset($_SESSION['username']) && (!iseet($_GET['pid']) || trim($_GET['pid']))=='')){
+if(!isset($_SESSION['username']) && (!isset($_GET['pid']) || trim($_GET['pid'])=='')){
 	header("Location: index.php");
 	exit;
 }
 
 if(isset($_SESSION['username'])){
     $islogin = true;
+} else {
+    $islogin = false;
 }
 
 if($islogin && isset($_GET['del']) && trim($_GET['del'])!=''){
@@ -57,32 +59,41 @@ if(isset($_GET['pid'])){
     $time = $post['row']['time'];
     $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid));
     $islike = false;
-    do {
-        if($_SESSION['username'] == $likes['row']['username']){
-            $islike = true;
-        }
-    }while($likes['row'] = $likes['query']->fetch_assoc());
-    $likes = $likes['num_rows'];
+    if ($likes['num_rows']>0 && isset($_SESSION['username'])){
+        do {
+            if($_SESSION['username'] == $likes['row']['username']){
+                $islike = true;
+            }
+        }while($likes['row'] = $likes['query']->fetch_assoc());
+    }
+    if ($likes['num_rows']<0){
+        $likes = 0;
+    } else {
+        $likes = $likes['num_rows'];
+    }
     if($islogin){
-        $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],$title);
+        $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],$title);
         $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();</script>");
     } else {
-        $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['site_name'],$title);
+        $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['name'],$title);
     }
     ?>
     <h1 style="margin-left:5px;"><?php echo $title;?></h1>
     <div class="ts separated buttons" style="position:absolute; top:10px; right:10px;">
         <button class="ts secondary icon button" id="like" data-id="<?php echo $pid;?>">
-            <i class="thumbs <?php if(!$islike){echo "outline";}?>up icon"></i> <?php echo $likes;?>
+            <i class="thumbs <?php if(!$islike){echo "outline";}?> up icon"></i> <?php echo $likes;?>
         </button>
-        <?php if ($post['row']['username'] == $_SESSION['username']) {?>
+        <?php
+        if (isset($_SESSION['username'])) { 
+            if ($post['row']['username'] == $_SESSION['username']) {?>
         <a class="ts secondary icon button" href="post.php?edit=<?php echo $pid;?>">
             <i class="edit icon"></i>
         </a>
         <a class="ts secondary icon button" href="post.php?del=<?php echo $pid;?>">
             <i class="trash icon"></i>
         </a>
-        <?php }?>
+        <?php } 
+        } ?>
     </div>
     <div class="ts segments">
         <div class="ts flatted segment" id="markdown">
@@ -96,11 +107,11 @@ if(isset($_GET['pid'])){
 
 } else if (isset($_GET['new'])) {
 // New
-    if (!$islogin)){
+    if (!$islogin){
         header('Location: index.php?err=nologin');
         exit;
     }
-    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],"文章");
+    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"文章");
     $view->addScript('<script src="./include/js/edit.js"></script>');
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();txtTrim();var editor = new Editor();editor.render();</script>");
     ?>
@@ -120,7 +131,7 @@ if(isset($_GET['pid'])){
     <?php $view->render();
 } else if (isset($_GET['edit'])) {
 // Edit
-    if (!$islogin)){
+    if (!$islogin){
         header('Location: index.php?err=nologin');
         exit;
     }
@@ -137,7 +148,7 @@ if(isset($_GET['pid'])){
     $title = $post['row']['title'];
     $content = $post['row']['content'];
     $time = $post['row']['time'];
-    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],$title);
+    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],$title);
     $view->addScript('<script src="./include/js/edit.js"></script>');
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();txtTrim();var editor = new Editor();editor.render();</script>");
 ?>
@@ -163,7 +174,7 @@ if(isset($_GET['pid'])){
         exit;
     }
     $post_list=getResult("SELECT * FROM `post` WHERE `username`='%s' ORDER BY `time`",array($_SESSION['username']));
-    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],"文章");
+    $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"文章");
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();ts('.ts.sortable.table').tablesort();<script>");
     if (isset($_GET['ok'])){
         if ($_GET['ok'] == "del"){ ?>
@@ -202,7 +213,12 @@ if(isset($_GET['pid'])){
             $pid = $post_list['row']['pid'];
             $title = $post_list['row']['title'];
             $time = $post_list['row']['time'];
-            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid))['num_rows'];
+            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid));
+            if ($likes['num_rows']<0) {
+                $likes = 0;
+            } else {
+                $likes = $likes['num_rows'];
+            }
     ?>
         <tr>
             <td><a href="post.php?pid=<?php echo $pid;?>"><?php echo $title;?></a></td>
@@ -223,3 +239,4 @@ if(isset($_GET['pid'])){
     <?php } 
     $view->render();
 }
+?>

@@ -42,17 +42,19 @@ function getResult($_query,$_value=array()){ // from secret blog function.php:sb
 }
 
 function pages($now_page,$total,$page_limit){
-	$text.='<select onchange="location.href=this.options[this.selectedIndex].value;">';
+	$text='<div class="ts basic center aligned segment">';
+	$text.='<select class="ts basic dropdown" onchange="location.href=this.options[this.selectedIndex].value;">';
 	$now_page = abs($now_page);
 	$page_num= ceil($total / $page_limit);
 	for($i=1;$i<=$page_num;$i++){
-		if($_now_page!=$i){
+		if($now_page!=$i){
 			$text.='<option value="index.php?page='.$i.'">第 '.$i.' 頁</option>';
 		}else{
 			$text.='<option value="index.php?page='.$i.'" selected="selected">第 '.$i.' 頁</option>';
 		}
 	}
 	$text.='</select>';
+	$text.='</div>';
 	return $text;
 }
 

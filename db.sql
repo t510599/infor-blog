@@ -18,7 +18,7 @@ CREATE TABLE `post` (
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `time` datetime NOT NULL,
-  `user` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -30,7 +30,7 @@ CREATE TABLE `like` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `post` (`pid`, `title`, `content`, `time`, `user`) VALUES
+INSERT INTO `post` (`pid`, `title`, `content`, `time`, `username`) VALUES
 (1,	'歡迎！',	'使用 Markdown 開始編輯吧!',now(),	'demo');
 
 INSERT INTO `user` (`id`, `username`, `pwd`, `name`) VALUES
