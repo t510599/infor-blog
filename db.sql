@@ -18,14 +18,14 @@ CREATE TABLE `post` (
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `time` datetime NOT NULL,
-  `user` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `like`;
 CREATE TABLE `like` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `pid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
