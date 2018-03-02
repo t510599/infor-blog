@@ -11,7 +11,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['name'
         header('Location: index.php?ok=reg');
         exit;
 	} else {
-        header('Location: account.php?new&err=lost');
+        header('Location: account.php?new&err=used');
         exit;
 	}
 } else if (isset($_SESSION['username']) && isset($_POST['username']) && isset($_POST['old']) && (isset($_POST['name']) || isset($_POST['new']))){
@@ -20,42 +20,38 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['name'
         header('Location: account.php?err=edit');
         exit;
     } else {
-        $original = getResult("SELECT * FROM `user` WHERE `username`='%s'",array($_POST['username']));
-        if (pwd($_POST['old'],$_POST['username']) != $original['row']['pwd'] || $original['num_rows'] == 0){
+        $original = getResult("SELECT * FROM `user` WHERE `username`='%s'",array($_SESSION['username']));
+        if (pwd($_POST['old'],$_SESSION['username']) != $original['row']['pwd'] || $original['num_rows'] == 0){
             header('Location: account.php?err=old');
             exit;
         } else {
             $passwd = pwd($_POST['new'],$_POST['username'])
-            $SQL->query("UPDATE `user` SET `name`='%s', `pwd`='%s' WHERE `username`='%s'",array($_POST['name'],$passwd,$_POST['username']));
+            $SQL->query("UPDATE `user` SET `name`='%s', `pwd`='%s' WHERE `username`='%s'",array($_POST['name'],$passwd,$_SESSION['username']));
             header('Location: account.php?ok=edit');
             exit;
         }
     }
+} else {
+    header('Location: account.php?new&err=miss');
+    exit;
 }
 
 if (!isset($_SESSION['username']) && !isset($_GET['new'])) {
     header('Location: account.php?new');
     exit;
+} else if (isset($_SESSION['username']) && isset($_GET['new'])) {
+    header('Location: account.php');
+    exit;
 }
 
 if (isset($_GET['new'])){
-    if (isset($_GET['err'])){
-        if ($_GET['err'] == "edit"){
-
-        } else if ($_GET['err'] == "old"){
-
-        } else if ($_GET['err'] == "used"){
-
-        } else if ($_GET['err'] == "miss"){
-
-        }
-    } else if (isset($_GET['ok'])){
-        if (isset($_GET['edit'])){
-
-        }
-    }
 // create 
     $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['site_name'],"註冊");
+    if ($_GET['err'] == "miss"){ ?>
+<div class="ts inverted negative message">
+    <p>請填寫所有欄位</p>
+</div>
+    <? }
 ?>
 <form action="account.php" method="POST" name="newacc">
     <div class="ts form">
@@ -87,6 +83,28 @@ if (isset($_GET['new'])){
     $name = getResult("SELECT `name` FROM `user` WHERE `username`=`%s`",array($username));
     $name = $name['row']['name'];;
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['site_name'],"帳號");
+    if (isset($_GET['err'])){
+        if ($_GET['err'] == "edit"){?>
+<div class="ts inverted negative message">
+    <p>修改失敗</p>
+</div>
+        <? } else if ($_GET['err'] == "old"){ ?>
+<div class="ts inverted negative message">
+    <p>舊密碼錯誤</p>
+</div>
+        <? } else if ($_GET['err'] == "used"){ ?>
+<div class="ts inverted negative message">
+    <p>此使用者名稱已被使用</p>
+</div>
+        <? }
+    }
+    if (isset($_GET['ok'])){
+        if (isset($_GET['ok'] == "edit")){ ?>
+<div class="ts inverted positive message">
+    <p>修改成功!</p>
+</div>
+        <? }
+    }
 ?>
 <form action="account.php" method="POST" name="editacc">
     <div class="ts form">

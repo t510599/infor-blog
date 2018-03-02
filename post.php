@@ -201,7 +201,7 @@ if(isset($_GET['pid'])){
             $author = getResult("SELECT `name` FROM `user` WHERE `username`=%s",array($post_list['row']['username']));
             $pid = $post_list['row']['pid'];
             $title = $post_list['row']['title'];
-            $time = $post_list['row']['time']
+            $time = $post_list['row']['time'];
             $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid))['num_rows'];
     ?>
         <tr>
