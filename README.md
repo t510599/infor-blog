@@ -35,5 +35,6 @@ $hostname_SQL = "";//MySQL伺服器
 $blog['name'] = 'Infor blog'; //網站名稱
 $blog['limit']='10';//首頁顯示文章數量
 ```
-將 `db.sql` 匯入資料庫後即可使用    
+將 `db.sql` 匯入資料庫後即可使用  
+
 已有預設帳號:demo 密碼:demo
