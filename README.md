@@ -7,12 +7,15 @@ Infor 考幹 第二大題 blog **本專案僅做研究用途，不可用作正�
 3. 登入後可於前端新增、編輯、刪除貼文 (30%)
 4. 可以幫任何貼文按讚，每貼文限一次 (20%)
 
+live demo : [https://stoneapp.tech/blog/](https://stoneapp.tech/blog/)
+
 ## Used libraries
 
 * jQuery
-* TocasUI [https://tocas-ui.com](https://tocas-ui.com)
+* TocasUI [https://tocas-ui.com/](https://tocas-ui.com)
 * Showdown [http://showdownjs.com/](http://showdownjs.com/)
-* Markdown Editor [https://github.com/lepture/editor](https://github.com/lepture/editor)
+* Markdown Editor [https://github.com/lepture/editor/](https://github.com/lepture/editor)
+* highlight.js [https://highlightjs.org/](https://highlightjs.org/)
 
 ## 參考
 Secret Blog [https://blog.gdsecret.net](https://blog.gdsecret.net)  
