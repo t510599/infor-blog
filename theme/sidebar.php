@@ -5,7 +5,7 @@ require_once('config.php');
 if(!isset($_SESSION['username'])){ ?>
     <div class="ts basic center aligned segment">登入或是<a href="account.php?new">註冊</a></div>
 <?php } else {
-    $name = getResult("SELECT `name` FROM `user` WHERE `username`=`%s`",array($_SESSION['username']));
+    $name = getResult("SELECT `name` FROM `user` WHERE `username`='%s'",array($_SESSION['username']));
     $name = $name['row']['name'];
     ?>
     <h3 class="ts header">

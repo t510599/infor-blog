@@ -67,7 +67,7 @@ class View {
 	}
 	
 	public function addScript($src){
-		$this->script .= $src.PHP_EOL;
+		$this->script .= $src."\n";
 	}
 	
 	public function render(){

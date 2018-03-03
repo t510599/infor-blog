@@ -4,7 +4,7 @@ require_once('config.php');
 require_once('include/view.php');
 
 if(isset($_GET['page'])){
-	$limit_start = abs(intval(($_GET['page']-1)*$blog['list']['limit']));
+	$limit_start = abs(intval(($_GET['page']-1)*$blog['limit']));
 	$post_list=getResult("SELECT * FROM `post` ORDER BY `time` DESC LIMIT %d,%d",array($limit_start,$blog['limit']));
 } else {
 	$limit_start = 0;
@@ -16,8 +16,12 @@ $all_post=getResult("SELECT * FROM `post`")['num_rows'];
 if(isset($_SESSION['username'])){
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"首頁");
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();</script>");
+    $view->addScript('<script src="./include/js/markdown.js"></script>');
+    $view->addScript('<script src="./include/js/like.js"></script>');
 } else {
     $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['name'],"首頁");
+    $view->addScript('<script src="./include/js/markdown.js"></script>');
+    $view->addScript('<script src="./include/js/like.js"></script>');
 }
 
 if (isset($_GET['ok'])){
@@ -67,7 +71,7 @@ if ($post_list['num_rows']>0){
                 }
             }while($likes['row'] = $likes['query']->fetch_assoc());
         }
-        if ($likes['num_rows']<0){
+        if ($likes['num_rows']<1){
             $likes = 0;
         } else {
             $likes = $likes['num_rows'];
@@ -83,7 +87,7 @@ if ($post_list['num_rows']>0){
                 Read <i class="right arrow icon"></i>
             </a>
         </div>
-        <div class="header"><?php echo $title; ?></div>
+        <div class="header" style="font-size: 2em;"><?php echo $title; ?></div>
         <div class="description" id="markdown">
             <?php echo sumarize($content,5); ?>
         </div>

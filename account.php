@@ -25,18 +25,18 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['name'
             header('Location: account.php?err=old');
             exit;
         } else {
-            $passwd = pwd($_POST['new'],$_POST['username'])
-            $SQL->query("UPDATE `user` SET `name`='%s', `pwd`='%s' WHERE `username`='%s'",array($_POST['name'],$passwd,$_SESSION['username']));
+            $passwd = pwd($_POST['new'],$_POST['username']);
+            if ($_POST['new'] != ''){
+                $SQL->query("UPDATE `user` SET `pwd`='%s' WHERE `username`='%s'",array($passwd,$_SESSION['username']));
+            }
+            if ($_POST['name'] != ''){
+                $SQL->query("UPDATE `user` SET `name`='%s' WHERE `username`='%s'",array($_POST['name'],$_SESSION['username']));
+            }
             header('Location: account.php?ok=edit');
             exit;
         }
     }
-} else {
-    header('Location: account.php?new&err=miss');
-    exit;
-}
-
-if (!isset($_SESSION['username']) && !isset($_GET['new'])) {
+} else if (!isset($_SESSION['username']) && !isset($_GET['new'])) {
     header('Location: account.php?new');
     exit;
 } else if (isset($_SESSION['username']) && isset($_GET['new'])) {
@@ -47,11 +47,17 @@ if (!isset($_SESSION['username']) && !isset($_GET['new'])) {
 if (isset($_GET['new'])){
 // create 
     $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['name'],"註冊");
-    if ($_GET['err'] == "miss"){ ?>
+    if (isset($_GET['err'])) {
+        if ($_GET['err'] == "miss"){ ?>
 <div class="ts inverted negative message">
     <p>請填寫所有欄位</p>
 </div>
-    <? }
+    <?php } else if ($_GET['err'] == "used") { ?>
+<div class="ts inverted negative message">
+    <p>此使用者名稱已被使用</p>
+</div>
+    <?php }
+    }
 ?>
 <form action="account.php" method="POST" name="newacc">
     <div class="ts form">
@@ -69,10 +75,7 @@ if (isset($_GET['new'])){
             <label>密碼</label>
             <input type="password" required="required" name="password">
         </div>
-        <a class="ts primary button" style="margin:5px 5px; float:right;" href="javascript:createAccount()">
-            送出
-        </a>
-        <script>function createAccount() {document.newacc.submit();}</script>
+        <input type="submit" class="ts primary button" style="margin:5px 5px; float:right;" value="送出">
     </div>
 </form>
 <?php
@@ -80,30 +83,27 @@ if (isset($_GET['new'])){
 } else {
 //edit
     $username = $_SESSION['username'];
-    $name = getResult("SELECT `name` FROM `user` WHERE `username`=`%s`",array($username));
+    $name = getResult("SELECT `name` FROM `user` WHERE `username`='%s'",array($username));
     $name = $name['row']['name'];;
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"帳號");
+    $view->addScript("<script>ts('.ts.dropdown').dropdown();</script>");
     if (isset($_GET['err'])){
-        if ($_GET['err'] == "edit"){?>
+        if ($_GET['err'] == "edit"){ ?>
 <div class="ts inverted negative message">
     <p>修改失敗</p>
 </div>
-        <? } else if ($_GET['err'] == "old"){ ?>
+        <?php } else if ($_GET['err'] == "old"){ ?>
 <div class="ts inverted negative message">
     <p>舊密碼錯誤</p>
 </div>
-        <? } else if ($_GET['err'] == "used"){ ?>
-<div class="ts inverted negative message">
-    <p>此使用者名稱已被使用</p>
-</div>
-        <? }
+        <?php }
     }
     if (isset($_GET['ok'])){
-        if (isset($_GET['ok'] == "edit")){ ?>
+        if ($_GET['ok'] == "edit"){ ?>
 <div class="ts inverted positive message">
     <p>修改成功!</p>
 </div>
-        <? }
+        <?php }
     }
 ?>
 <form action="account.php" method="POST" name="editacc">
@@ -126,9 +126,7 @@ if (isset($_GET['new'])){
             <input type="password" name="new">
             <small>留空則不修改。</small>
         </div>
-        <a class="ts primary button" style="margin:5px 5px; float:right;" href="javascript:editAccount()">
-            送出
-        </a>
+        <input type="submit" class="ts primary button" style="margin:5px 5px; float:right;" value="送出">
         <script>function editAccount() {document.editacc.submit();}</script>
     </div>
 </form>

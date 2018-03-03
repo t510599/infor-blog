@@ -37,9 +37,9 @@ if(!@$includepath){
 error_reporting(E_ALL);
 require_once('db.php');
 
-$database_SQL = "blog";//資料庫名稱
-$username_SQL = "blog";//連線帳號
-$password_SQL = "blog";//連線密碼
+$database_SQL = "infor";//資料庫名稱
+$username_SQL = "infor";//連線帳號
+$password_SQL = "infor";//連線密碼
 $hostname_SQL = "127.0.0.1";//MySQL伺服器
 
 global $SQL;

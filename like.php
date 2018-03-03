@@ -11,7 +11,7 @@ if(!isset($_GET['pid'])) {
 } else {
     $pid = abs($_GET['pid']);
     $result = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid));
-    if ($result['num_rows']<0){
+    if ($result['num_rows']<1){
         $likes = 0;
     } else {
         $likes = $result['num_rows'];
@@ -20,20 +20,32 @@ if(!isset($_GET['pid'])) {
         $data = array('status' => false,'id' => $pid,'likes' => $likes);
     } else { // authorized user like actions
         $userliked = false;
-        do {
-            if($_SESSION['username'] == $result['row']['username']){
-                $userliked = true;
-            }
-        }while($result['row'] = $result['query']->fetch_assoc());
+        if ($result['num_rows']>0) {
+            do {
+                if($_SESSION['username'] == $result['row']['username']){
+                    $userliked = true;
+                }
+            }while($result['row'] = $result['query']->fetch_assoc());
+        }
         if($userliked){
             // unlike
             $SQL->query("DELETE FROM `like` WHERE `pid`='%d' AND `username`='%s'",array($pid,$_SESSION['username']));
-            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid))['num_rows'];
+            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid));
+            if ($likes['num_rows']<1){
+                $likes = 0;
+            } else {
+                $likes = $likes['num_rows'];
+            }
             $data = array('status' => false,'id' => $pid,'likes' => $likes);
         } else {
             // like
             $SQL->query("INSERT INTO `like` (`pid`, `username`) VALUES ('%d', '%s')",array($pid,$_SESSION['username']));
-            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid))['num_rows'];
+            $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid));
+            if ($likes['num_rows']<1){
+                $likes = 0;
+            } else {
+                $likes = $likes['num_rows'];
+            }
             $data = array('status' => true,'id' => $pid,'likes' => $likes);
         }
     }
@@ -42,3 +54,4 @@ if(!isset($_GET['pid'])) {
 header('Content-Type: application/json');
 echo json_encode($data);
 exit;
+?>

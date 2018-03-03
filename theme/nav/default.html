@@ -6,10 +6,10 @@
                 <input placeholder="Username" type="text" name="username">
                 <input placeholder="Password" type="password" name="password">
             </div>
-            <a class="ts small icon button" style="margin:5px 5px;" href="javascript:submitform()">
+            <button class="ts small primary icon button" style="margin:5px 5px;" id="do">
                 <i class="sign in icon"></i>
-            </a>
-            <script>function submitform() {document.login.submit();}</script>
+            </button>
+            <script>$('#do').click(() => {document.login.submit();});</script>
         </form>
     </div>
 </div>

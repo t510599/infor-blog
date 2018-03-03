@@ -3,20 +3,20 @@ require_once('connection/SQL.php');
 require_once('config.php');
 require_once('include/view.php');
 
-if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']) && isset($_POST['content']) && trim($_POST['pid'])!='' && trim($_POST['title'])!='' && trim($_POST['content'])!=''){
-    if($_POST['pid'] = "-1"){
+if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']) && isset($_POST['content'])){
+    if($_POST['pid'] == "-1"){
         $current = date('Y-m-d H:i:s');
-        $SQL->query("INSERT INTO `post` (`title`, `content`, `time`, `user`) VALUES ('%s', '%s', '%s', '%s')",array(htmlspecialchars($_POST['title']),$_POST['content'],$current,$_SESSION['username']));
+        $SQL->query("INSERT INTO `post` (`title`, `content`, `time`, `username`) VALUES ('%s', '%s', '%s', '%s')",array(htmlspecialchars($_POST['title']),$_POST['content'],$current,$_SESSION['username']));
         $pid = getResult("SELECT `pid` FROM `post` WHERE `time` = '%s'",array($current))['row']['pid'];
         header('Location: post.php?pid='.$pid);
         exit;
     } else {
-        $author = getResult("SELECT `username` FROM `post` WHERE `pid` = `%d`",array($_POST['pid']))['row']['username'];
+        $author = getResult("SELECT `username` FROM `post` WHERE `pid` = '%d'",array($_POST['pid']))['row']['username'];
         if ($author != $_SESSION['username']){
             header('Location: post.php?err=edit');
             exit;
         }
-        $SQL->query("UPDATE `post` SET `title`='%s', `content`='%s' WHERE `pid`='%d' AND `user`='%s'",array(htmlspecialchars($_POST['title']),$_POST['content'],abs($_POST['id']),$_SESSION['username']));
+        $SQL->query("UPDATE `post` SET `title`='%s', `content`='%s' WHERE `pid`='%d' AND `username`='%s'",array(htmlspecialchars($_POST['title']),$_POST['content'],abs($_POST['pid']),$_SESSION['username']));
         header('Location: post.php?pid='.$_POST['pid']);
         exit;
     }
@@ -34,14 +34,18 @@ if(isset($_SESSION['username'])){
 }
 
 if($islogin && isset($_GET['del']) && trim($_GET['del'])!=''){
-    $author = getResult("SELECT `username` FROM `post` WHERE `pid` = `%d`",array($_GET['del']))['row']['username'];
+    $author = getResult("SELECT `username` FROM `post` WHERE `pid` = '%d'",array($_GET['del']))['row']['username'];
     if ($author != $_SESSION['username']) {
         header('Location: post.php?err=del');
         exit;
     } else {
         $SQL->query("DELETE FROM `post` WHERE `pid`='%d' AND `username` = '%s'",array($_GET['del'],$_SESSION['username']));
         header('Location: post.php?ok=del');
+        exit;
     }
+} else if (!$islogin && isset($_GET['del'])) {
+    header('Location: index.php?err=nologin');
+    exit;
 }
 
 // View
@@ -66,7 +70,7 @@ if(isset($_GET['pid'])){
             }
         }while($likes['row'] = $likes['query']->fetch_assoc());
     }
-    if ($likes['num_rows']<0){
+    if ($likes['num_rows']<1){
         $likes = 0;
     } else {
         $likes = $likes['num_rows'];
@@ -74,6 +78,8 @@ if(isset($_GET['pid'])){
     if($islogin){
         $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],$title);
         $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();</script>");
+        $view->addScript('<script src="./include/js/markdown.js"></script>');
+        $view->addScript('<script src="./include/js/like.js"></script>');
     } else {
         $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['name'],$title);
     }
@@ -112,12 +118,13 @@ if(isset($_GET['pid'])){
         exit;
     }
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"文章");
+    $view->addScript('<script src="./include/js/markdown.js"></script>');    
     $view->addScript('<script src="./include/js/edit.js"></script>');
-    $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();txtTrim();var editor = new Editor();editor.render();</script>");
+    $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();textarea.value = txtTrim(textarea.value);</script>");
     ?>
 <form action="post.php" method="POST" name="edit" id="edit">
     <div class="ts huge fluid underlined input">
-        <input placeholder="標題" name="header" value=""></input>
+        <input placeholder="標題" name="title" value=""></input>
     </div>
     <div class="ts separated buttons" style="position:absolute; top:10px; right:10px;">
         <a href="javascript:post();" class="ts positive button">發布</a>
@@ -141,20 +148,22 @@ if(isset($_GET['pid'])){
         header('Location: index.php?err=post');
         exit;
     }
-    if($post['row']['name'] != $_SESSION['username']){
+    if($post['row']['username'] != $_SESSION['username']){
         header('Location: post.php?err=edit');
+        exit;
     }
     // get post data
     $title = $post['row']['title'];
     $content = $post['row']['content'];
     $time = $post['row']['time'];
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],$title);
+    $view->addScript('<script src="./include/js/markdown.js"></script>');
     $view->addScript('<script src="./include/js/edit.js"></script>');
-    $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();txtTrim();var editor = new Editor();editor.render();</script>");
+    $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();textarea.value = txtTrim(textarea.value);</script>");
 ?>
 <form action="post.php" method="POST" name="edit" id="edit">
     <div class="ts huge fluid underlined input">
-        <input placeholder="標題" name="header" value="<?php echo $title;?>"></input>
+        <input placeholder="標題" name="title" value="<?php echo $title;?>"></input>
     </div>
     <div class="ts separated buttons" style="position:absolute; top:10px; right:10px;">
         <a href="javascript:post();" class="ts positive button">發布</a>
@@ -175,7 +184,7 @@ if(isset($_GET['pid'])){
     }
     $post_list=getResult("SELECT * FROM `post` WHERE `username`='%s' ORDER BY `time`",array($_SESSION['username']));
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"文章");
-    $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();ts('.ts.sortable.table').tablesort();<script>");
+    $view->addScript("<script>ts('.ts.dropdown').dropdown();ts('.ts.sortable.table').tablesort();</script>");
     if (isset($_GET['ok'])){
         if ($_GET['ok'] == "del"){ ?>
 <div class="ts inverted positive message">
@@ -209,12 +218,12 @@ if(isset($_GET['pid'])){
     <?php
     if($post_list['num_rows']>0){
         do {
-            $author = getResult("SELECT `name` FROM `user` WHERE `username`=%s",array($post_list['row']['username']));
+            $author = getResult("SELECT `name` FROM `user` WHERE `username`='%s'",array($post_list['row']['username']));
             $pid = $post_list['row']['pid'];
             $title = $post_list['row']['title'];
             $time = $post_list['row']['time'];
             $likes = getResult("SELECT * FROM `like` WHERE `pid`='%d'",array($pid));
-            if ($likes['num_rows']<0) {
+            if ($likes['num_rows']<1) {
                 $likes = 0;
             } else {
                 $likes = $likes['num_rows'];
@@ -236,6 +245,8 @@ if(isset($_GET['pid'])){
         <tr>
             <td colspan="4">沒有文章</td>
         <tr>
+    </tbody>
+</table>
     <?php } 
     $view->render();
 }
