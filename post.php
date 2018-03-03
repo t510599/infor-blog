@@ -78,6 +78,8 @@ if(isset($_GET['pid'])){
         $view->addScript('<script src="./include/js/like.js"></script>');
     } else {
         $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['name'],$title);
+        $view->addScript('<script src="./include/js/markdown.js"></script>');
+        $view->addScript('<script src="./include/js/like.js"></script>');
     }
     ?>
     <h1 style="margin-left:5px;"><?php echo $title;?></h1>
