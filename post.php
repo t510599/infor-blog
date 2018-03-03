@@ -102,7 +102,7 @@ if(isset($_GET['pid'])){
         } ?>
     </div>
     <div class="ts segments">
-        <div class="ts flatted segment" id="markdown">
+        <div class="ts flatted segment" id="markdown" style="font-size:15px; line-height:1.8em;">
             <?php echo $content;?>
         </div>
         <div class="ts tertiary segment">
