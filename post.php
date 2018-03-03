@@ -22,11 +22,6 @@ if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']
     }
 }
 
-if(!isset($_SESSION['username']) && (!isset($_GET['pid']) || trim($_GET['pid'])=='')){
-	header("Location: index.php");
-	exit;
-}
-
 if(isset($_SESSION['username'])){
     $islogin = true;
 } else {
@@ -40,6 +35,7 @@ if($islogin && isset($_GET['del']) && trim($_GET['del'])!=''){
         exit;
     } else {
         $SQL->query("DELETE FROM `post` WHERE `pid`='%d' AND `username` = '%s'",array($_GET['del'],$_SESSION['username']));
+        $SQL->query("DELETE FROM `like` WHERE `pid`='%d'",array($_GET['del']));
         header('Location: post.php?ok=del');
         exit;
     }
