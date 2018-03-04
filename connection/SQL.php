@@ -44,4 +44,4 @@ $hostname_SQL = "127.0.0.1";//MySQL伺服器
 
 global $SQL;
 $SQL = new Database($hostname_SQL,$username_SQL,$password_SQL,$database_SQL);
-$SQL->query("SET NAMES 'utf8'");
+$SQL->query("SET NAMES 'utf8mb4'");

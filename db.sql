@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS `post`;
 CREATE TABLE `post` (
   `pid` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `content` text COLLATE utf8_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `time` datetime NOT NULL,
   `username` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`pid`)
