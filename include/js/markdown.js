@@ -1,11 +1,14 @@
 // code highlight font
 $(document.head).append('<style>code {font-family: Menlo, Monaco, Consolas, monospace !important;}</style>');
+// img rwd
+$(document.head).append('<style>img {max-width:99%;}</style>');
 
 var converter = new showdown.Converter();
 converter.setOption('simpleLineBreaks', true);
 converter.setOption('strikethrough', true);
 converter.setOption('tables', true);
 converter.setOption('tasklists', true);
+converter.setOption('emoji', true);
 
 markdownParse();
 tablePrase();
