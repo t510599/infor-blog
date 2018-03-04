@@ -15,8 +15,9 @@ if((isset($_POST['username']))&&(isset($_POST['password']))&&($_POST['username']
 <html>
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.rawgit.com/TeaMeow/TocasUI/2.3.3/dist/tocas.css" rel='stylesheet'>
-    <script src="https://cdn.rawgit.com/TeaMeow/TocasUI/2.3.3/dist/tocas.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css" rel='stylesheet'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.js"></script>
     <title>登入 | <?php echo $blog['name']; ?></title>
 	<style type="text/css">
 		html,body {
