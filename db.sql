@@ -8,6 +8,7 @@ CREATE TABLE `user` (
   `username` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   `pwd` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `level` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -31,7 +32,7 @@ CREATE TABLE `like` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `post` (`pid`, `title`, `content`, `time`, `username`) VALUES
-(1,	'歡迎！',	'使用 Markdown 開始編輯吧!',now(),	'demo');
+(1,	'歡迎！',	'使用 Markdown 開始編輯吧!\r\n[Markdown 語法說明](http://markdown.tw/)',now(),	'demo');
 
 INSERT INTO `user` (`id`, `username`, `pwd`, `name`) VALUES
 (1,	'demo',	'710a0e24b2de3a5501ad3cb5f7af76ec705fa15cc970f1ee8d3d2b2254e01a2116aa7dc0405894fcd8c017c3b901be4f51a845d9a3540e024c342ac6c372c419', 'Demo User');

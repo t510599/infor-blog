@@ -116,6 +116,15 @@ if(isset($_GET['pid'])){
         exit;
     }
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"文章");
+    $level = getResult("SELECT `level` FROM `user` WHERE `username` = '%s'",array($_SESSION['username']))['row']['level'];
+    if (intval($level) != 1) { ?>
+<div class="ts inverted negative message">
+    <p>你沒有權限發文!</p>
+</div>
+    <?php
+        $view->render();
+        exit;
+    }
     $view->addScript('<script src="./include/js/markdown.js"></script>');    
     $view->addScript('<script src="./include/js/edit.js"></script>');
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();textarea.value = txtTrim(textarea.value);</script>");
@@ -138,6 +147,16 @@ if(isset($_GET['pid'])){
 // Edit
     if (!$islogin){
         header('Location: index.php?err=nologin');
+        exit;
+    }
+    $level = getResult("SELECT `level` FROM `user` WHERE `username` = '%s'",array($_SESSION['username']))['row']['level'];
+    if (intval($level) != 1) {
+        $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"文章"); ?>
+<div class="ts inverted negative message">
+    <p>你沒有權限發文!</p>
+</div>
+    <?php
+        $view->render();
         exit;
     }
     $pid = abs($_GET['edit']);
