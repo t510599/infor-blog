@@ -82,22 +82,28 @@ if(isset($_GET['pid'])){
         $view->addScript('<script src="./include/js/like.js"></script>');
     }
     ?>
-    <h1 style="margin-left:5px;"><?php echo $title;?></h1>
-    <div class="ts separated buttons" style="position:absolute; top:10px; right:10px;">
-        <button class="ts secondary icon button" id="like" data-id="<?php echo $pid;?>">
-            <i class="thumbs <?php if(!$islike){echo "outline";}?> up icon"></i> <?php echo $likes;?>
-        </button>
-        <?php
-        if (isset($_SESSION['username'])) { 
-            if ($post['row']['username'] == $_SESSION['username']) {?>
-        <a class="ts secondary icon button" href="post.php?edit=<?php echo $pid;?>">
-            <i class="edit icon"></i>
-        </a>
-        <a class="ts secondary icon button" href="post.php?del=<?php echo $pid;?>">
-            <i class="trash icon"></i>
-        </a>
-        <?php } 
-        } ?>
+    <div class="ts stackable grid">
+        <div class="stretched column">
+            <h1 style="margin-left:5px;word-break:break-all;"><?php echo $title;?></h1>
+        </div>
+        <div class="column">
+            <div class="ts buttons">
+                <button class="ts secondary icon button" id="like" data-id="<?php echo $pid;?>">
+                    <i class="thumbs <?php if(!$islike){echo "outline";}?> up icon"></i> <?php echo $likes;?>
+                </button>
+                <?php
+                if (isset($_SESSION['username'])) { 
+                    if ($post['row']['username'] == $_SESSION['username']) {?>
+                <a class="ts secondary icon button" href="post.php?edit=<?php echo $pid;?>">
+                    <i class="edit icon"></i>
+                </a>
+                <a class="ts secondary icon button" href="post.php?del=<?php echo $pid;?>">
+                    <i class="trash icon"></i>
+                </a>
+                <?php } 
+                } ?>
+            </div>
+        </div>
     </div>
     <div class="ts segments">
         <div class="ts flatted segment" id="markdown" style="font-size:15px; line-height:1.8em;">
@@ -128,14 +134,21 @@ if(isset($_GET['pid'])){
     $view->addScript('<script src="./include/js/markdown.js"></script>');    
     $view->addScript('<script src="./include/js/edit.js"></script>');
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();textarea.value = txtTrim(textarea.value);</script>");
+
     ?>
 <form action="post.php" method="POST" name="edit" id="edit">
-    <div class="ts huge fluid underlined input">
-        <input placeholder="標題" name="title" value=""></input>
-    </div>
-    <div class="ts separated buttons" style="position:absolute; top:10px; right:10px;">
-        <a href="javascript:post();" class="ts positive button">發布</a>
-        <a href="index.php" class="ts button">取消</a>
+    <div class="ts stackable grid">
+        <div class="stretched column">
+            <div class="ts huge fluid underlined input">
+                <input placeholder="標題" name="title" value=""></input>
+            </div>
+        </div>
+        <div class="column" style="display:flex; justify-content:center; align-items:center;">
+            <div class="ts buttons">
+                <a href="javascript:post();" class="ts positive button">發布</a>
+                <a href="index.php" class="ts button">取消</a>
+            </div>
+        </div>
     </div>
     <div class="editor-wrapper">
         <textarea id="markdown" name="content"></textarea>
@@ -179,13 +192,19 @@ if(isset($_GET['pid'])){
     $view->addScript("<script>ts('.ts.dropdown:not(.basic)').dropdown();textarea.value = txtTrim(textarea.value);</script>");
 ?>
 <form action="post.php" method="POST" name="edit" id="edit">
-    <div class="ts huge fluid underlined input">
-        <input placeholder="標題" name="title" value="<?php echo $title;?>"></input>
-    </div>
-    <div class="ts separated buttons" style="position:absolute; top:10px; right:10px;">
-        <a href="javascript:post();" class="ts positive button">發布</a>
-        <a href="post.php?del=<?php echo $pid;?>" class="ts negative button">刪除</a>
-        <a href="index.php" class="ts button">取消</a>
+    <div class="ts stackable grid">
+        <div class="stretched column">
+            <div class="ts huge fluid underlined input">
+                <input placeholder="標題" name="title" value="<?php echo $title;?>"></input>
+            </div>
+        </div>
+        <div class="column" style="display:flex; justify-content:center; align-items:center;">
+            <div class="ts buttons">
+                <a href="javascript:post();" class="ts positive button">發布</a>
+                <a href="post.php?del=<?php echo $pid;?>" class="ts negative button">刪除</a>
+                <a href="index.php" class="ts button">取消</a>
+            </div>
+        </div>
     </div>
     <div class="editor-wrapper">
         <textarea id="markdown" name="content"><?php echo $content;?></textarea>
