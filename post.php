@@ -6,7 +6,7 @@ require_once('include/view.php');
 if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']) && isset($_POST['content'])){
     if($_POST['pid'] == "-1"){
         $current = date('Y-m-d H:i:s');
-        $SQL->query("INSERT INTO `post` (`title`, `content`, `time`, `username`) VALUES ('%s', '%s', '%s', '%s')",array(htmlspecialchars($_POST['title']),$_POST['content'],$current,$_SESSION['username']));
+        $SQL->query("INSERT INTO `post` (`title`, `content`, `time`, `username`) VALUES ('%s', '%s', '%s', '%s')",array(htmlspecialchars($_POST['title']),htmlspecialchars($_POST['content']),$current,$_SESSION['username']));
         $pid = getResult("SELECT `pid` FROM `post` WHERE `time` = '%s'",array($current))['row']['pid'];
         header('Location: post.php?pid='.$pid);
         exit;
@@ -16,7 +16,7 @@ if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']
             header('Location: post.php?err=edit');
             exit;
         }
-        $SQL->query("UPDATE `post` SET `title`='%s', `content`='%s' WHERE `pid`='%d' AND `username`='%s'",array(htmlspecialchars($_POST['title']),$_POST['content'],abs($_POST['pid']),$_SESSION['username']));
+        $SQL->query("UPDATE `post` SET `title`='%s', `content`='%s' WHERE `pid`='%d' AND `username`='%s'",array(htmlspecialchars($_POST['title']),htmlspecialchars($_POST['content']),abs($_POST['pid']),$_SESSION['username']));
         header('Location: post.php?pid='.$_POST['pid']);
         exit;
     }
