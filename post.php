@@ -4,6 +4,11 @@ require_once('config.php');
 require_once('include/view.php');
 
 if(isset($_SESSION['username']) && isset($_POST['pid']) && isset($_POST['title']) && isset($_POST['content'])){
+    $level = getResult("SELECT `level` FROM `user` WHERE `username` = '%s'",array($_SESSION['username']))['row']['level'];
+    if (intval($level) < 1) {
+        header('Location: post.php');
+        exit;
+    }
     if($_POST['pid'] == "-1"){
         $current = date('Y-m-d H:i:s');
         $SQL->query("INSERT INTO `post` (`title`, `content`, `time`, `username`) VALUES ('%s', '%s', '%s', '%s')",array(htmlspecialchars($_POST['title']),htmlspecialchars($_POST['content']),$current,$_SESSION['username']));
@@ -107,7 +112,7 @@ if(isset($_GET['pid'])){
     </div>
     <div class="ts segments">
         <div class="ts flatted segment" id="markdown" style="font-size:15px; line-height:1.8em;">
-            <?php echo $content;?>
+<?php echo $content;?>
         </div>
         <div class="ts tertiary segment">
             <i class="user icon"></i> <?php echo $name;?> <i class="calendar icon"></i> <?php echo $time;?>
@@ -123,7 +128,7 @@ if(isset($_GET['pid'])){
     }
     $view = new View('theme/default.html','theme/nav/util.php','theme/sidebar.php',$blog['name'],"文章");
     $level = getResult("SELECT `level` FROM `user` WHERE `username` = '%s'",array($_SESSION['username']))['row']['level'];
-    if (intval($level) != 1) { ?>
+    if (intval($level) < 1) { ?>
 <div class="ts inverted negative message">
     <p>你沒有權限發文!</p>
 </div>
@@ -140,7 +145,7 @@ if(isset($_GET['pid'])){
     <div class="ts stackable grid">
         <div class="stretched column">
             <div class="ts huge fluid underlined input">
-                <input placeholder="標題" name="title" value=""></input>
+                <input placeholder="標題" name="title" value="">
             </div>
         </div>
         <div class="column" style="display:flex; justify-content:center; align-items:center;">
@@ -195,7 +200,7 @@ if(isset($_GET['pid'])){
     <div class="ts stackable grid">
         <div class="stretched column">
             <div class="ts huge fluid underlined input">
-                <input placeholder="標題" name="title" value="<?php echo $title;?>"></input>
+                <input placeholder="標題" name="title" value="<?php echo $title;?>">
             </div>
         </div>
         <div class="column" style="display:flex; justify-content:center; align-items:center;">
