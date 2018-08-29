@@ -7,7 +7,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['name'
 	$_POST['username']=strtolower($_POST['username']);
 	$exist = getResult("SELECT * FROM `user` WHERE `username`='%s'",array($_POST['username']))['num_rows'];
 	if($exist==0){
-		$SQL->query("INSERT INTO `user` (`username`, `pwd`, `name`) VALUES ('%s', '%s', '%s')",array($_POST['username'],pwd($_POST['password'],$_POST['username']),$_POST['name']));
+		$SQL->query("INSERT INTO `user` (`username`, `pwd`, `name`) VALUES ('%s', '%s', '%s')",array($_POST['username'],pwd($_POST['password'],$_POST['username']),htmlspecialchars($_POST['name'])));
         header('Location: index.php?ok=reg');
         exit;
 	} else {
@@ -30,7 +30,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['name'
                 $SQL->query("UPDATE `user` SET `pwd`='%s' WHERE `username`='%s'",array($passwd,$_SESSION['username']));
             }
             if ($_POST['name'] != ''){
-                $SQL->query("UPDATE `user` SET `name`='%s' WHERE `username`='%s'",array($_POST['name'],$_SESSION['username']));
+                $SQL->query("UPDATE `user` SET `name`='%s' WHERE `username`='%s'",array(htmlspecialchars($_POST['name']),$_SESSION['username']));
             }
             header('Location: account.php?ok=edit');
             exit;
@@ -47,6 +47,14 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['name'
 if (isset($_GET['new'])){
 // create 
     $view = new View('theme/default.html','theme/nav/default.html','theme/sidebar.php',$blog['name'],"註冊");
+    if (!$blog['register']) { ?>
+<div class="ts inverted negative message">
+    <p>抱歉，目前暫停註冊</p>
+</div>
+    <?php
+        $view->render();
+        exit;
+    }
     if (isset($_GET['err'])) {
         if ($_GET['err'] == "miss"){ ?>
 <div class="ts inverted negative message">
@@ -127,7 +135,6 @@ if (isset($_GET['new'])){
             <small>留空則不修改。</small>
         </div>
         <input type="submit" class="ts primary button" style="margin:5px 5px; float:right;" value="送出">
-        <script>function editAccount() {document.editacc.submit();}</script>
     </div>
 </form>
 <?php $view->render();
